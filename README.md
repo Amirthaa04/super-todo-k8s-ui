@@ -20,7 +20,8 @@ minikube service todo-app-service
 
 A stylish, full-featured Todo App built with **Node.js + HTML/CSS** and deployed using **Docker & Kubernetes (Minikube)** with **GitHub Actions CI/CD** pipeline support.
 
-![screenshot](C:\Users\amirt\Downloads\todo-app-k8s-with-frontend\todo-app\app\public\Screenshot 2025-07-10 224602.png) <!-- Add this file manually if needed -->
+![screenshot](./C:\Users\amirt\Downloads\todo-app-k8s-with-frontend\todo-app\app\public\Screenshot 2025-07-10 224602.png) <!-- Add this file manually if needed -->
+
 
 ---
 

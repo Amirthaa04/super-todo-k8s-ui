@@ -1,0 +1,222 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Todo App</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 2rem; }
+    input, button { padding: 8px; margin: 5px; }
+    ul { list-style-type: none; padding: 0; }
+    li { margin: 8px 0; }
+  </style>
+</head>
+<body>
+  <h1>Todo List</h1>
+  <input type="text" id="taskInput" placeholder="Enter task" />
+  <button onclick="addTodo()">Add</button>
+
+  <ul id="todoList"></ul>
+
+  <script>
+    const baseUrl = "/todos";
+
+    async function fetchTodos() {
+      const res = await fetch(baseUrl);
+      const todos = await res.json();
+      const list = document.getElementById("todoList");
+      list.innerHTML = '';
+      todos.forEach(todo => {
+        const li = document.createElement("li");
+        li.innerText = todo.task + ' ';
+        const delBtn = document.createElement("button");
+        delBtn.innerText = "Delete";
+        delBtn.onclick = () => deleteTodo(todo.id);
+        li.appendChild(delBtn);
+        list.appendChild(li);
+      });
+    }
+
+    async function addTodo() {
+      const task = document.getElementById("taskInput").value.trim();
+      if (!task) return alert("Enter a task!");
+      await fetch(baseUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ task })
+      });
+      document.getElementById("taskInput").value = '';
+      fetchTodos();
+    }
+
+    async function deleteTodo(id) {
+      await fetch(`${baseUrl}/${id}`, { method: "DELETE" });
+      fetchTodos();
+    }
+
+    fetchTodos();
+  </script>
+</body>
+</html> -->
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Super Todo App</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 2rem auto;
+      max-width: 600px;
+      background: #f9f9f9;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+    }
+    input, button {
+      padding: 10px;
+      font-size: 16px;
+    }
+    input {
+      width: 70%;
+      margin-right: 10px;
+    }
+    button {
+      cursor: pointer;
+      background-color: #2980b9;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      background: #fff;
+      margin: 8px 0;
+      padding: 10px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-left: 5px solid #3498db;
+    }
+    li.done {
+      text-decoration: line-through;
+      background-color: #dff0d8;
+      border-left-color: #2ecc71;
+    }
+    .progress-container {
+      margin-top: 20px;
+    }
+    .progress-bar {
+      width: 100%;
+      background-color: #ddd;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 20px;
+      background-color: #2ecc71;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+  </style>
+</head>
+<body>
+  <h1>Super Todo App ✅</h1>
+  <div>
+    <input type="text" id="taskInput" placeholder="Add your task..." />
+    <button onclick="addTodo()">Add</button>
+  </div>
+
+  <ul id="todoList"></ul>
+
+  <div class="progress-container">
+    <p><strong>Progress:</strong></p>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  </div>
+
+  <script>
+    const baseUrl = "/todos";
+
+    async function fetchTodos() {
+      const res = await fetch(baseUrl);
+      const todos = await res.json();
+      const list = document.getElementById("todoList");
+      const progress = document.getElementById("progressFill");
+      list.innerHTML = '';
+      let completed = 0;
+
+      todos.forEach(todo => {
+        const li = document.createElement("li");
+        li.className = todo.completed ? "done" : "";
+
+        const taskSpan = document.createElement("span");
+        taskSpan.innerText = todo.task;
+
+        const controls = document.createElement("div");
+
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.checked = todo.completed;
+        checkbox.onchange = () => toggleComplete(todo.id, checkbox.checked);
+
+        const deleteBtn = document.createElement("button");
+        deleteBtn.innerText = "❌";
+        deleteBtn.onclick = () => deleteTodo(todo.id);
+
+        controls.appendChild(checkbox);
+        controls.appendChild(deleteBtn);
+
+        li.appendChild(taskSpan);
+        li.appendChild(controls);
+        list.appendChild(li);
+
+        if (todo.completed) completed++;
+      });
+
+      const percent = todos.length ? (completed / todos.length) * 100 : 0;
+      progress.style.width = percent + "%";
+    }
+
+    async function addTodo() {
+      const task = document.getElementById("taskInput").value.trim();
+      if (!task) return alert("Enter a task!");
+      await fetch(baseUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ task })
+      });
+      document.getElementById("taskInput").value = '';
+      fetchTodos();
+    }
+
+    async function deleteTodo(id) {
+      await fetch(`${baseUrl}/${id}`, { method: "DELETE" });
+      fetchTodos();
+    }
+
+    async function toggleComplete(id, completed) {
+      await fetch(`${baseUrl}/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ completed })
+      });
+      fetchTodos();
+    }
+
+    fetchTodos();
+  </script>
+</body>
+</html>

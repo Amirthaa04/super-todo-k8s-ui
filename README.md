@@ -1,5 +1,5 @@
 
-# 🧩 Super Todo App – DevOps Edition (Kubernetes + CI/CD)
+# 🧩 ontainerized Todo App with CI/CD Pipeline on Kubernetes
 
 A stylish, full-featured Todo App built with **Node.js + HTML/CSS** and deployed using **Docker & Kubernetes (Minikube)** with **GitHub Actions CI/CD** pipeline support.
 
